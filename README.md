@@ -1,20 +1,20 @@
-# Arli - Tools for an Arabic development
+# [Arli](http://elkebirmed.github.io/arli/) - Tools for an Arabic development
 
 ## Usage
 
-### node
+#### node
 
 ```bash
 $ npm install arli
 ```
 
-### bower
+#### bower
 
 ```bash
 $ bower install arli
 ```
 
-### browser
+#### browser
 
 ```html
 <script src="arli.min.js"></script>
@@ -26,7 +26,7 @@ $ bower install arli
 
 Convert some characters to make the text more Arabian.
 
-#### Arguments
+##### Arguments
 
 - `str` (_string_): The string to convert.
 - `[options=['date', 'number', 'dash', 'char']]` (_array_): Decide which features to use in the output.
@@ -40,7 +40,7 @@ You can use those features: `char`, `dash` or `dash-extra`, `date` or `date-reve
 - `date-reverse`: Reversed Arabic date format.
 - `number`: Arabic numbers.
 
-#### Returns
+##### Returns
 
 (_string_) an Arabian string.
 
@@ -58,7 +58,7 @@ arli.arabize('0123456789%(,;*)?', ['char']);
 
 Count the matched characters in the string.
 
-#### Arguments
+##### Arguments
 
 - `str` (_string_): The string to count in.
 - `[type]` (_string_): A regular expression pattern to be used.
@@ -67,7 +67,7 @@ You can use other patterns: `all`, `digit`, `every`, `letter`, `strict`, `punct`
 
 See [pattern options](#pattern-options) for more information.
 
-#### Returns
+##### Returns
 
 (_number_) the number of the matched characters in the string.
 
@@ -88,7 +88,7 @@ arli.count('Hello! مرحبا ۱۲۳', 'digit');
 
 Count the non matched characters in the string.
 
-#### Arguments
+##### Arguments
 
 - `str` (_String_):  The string to count in.
 - `[type]` (_String_):  A regular expression pattern to be used.
@@ -97,7 +97,7 @@ You can use other patterns: `all`, `digit`, `every`, `letter`, `strict`, `punct`
 
 See [pattern options](#pattern-options) for more information.
 
-#### Returns
+##### Returns
 
 (_Number_) the number of the non matched characters in the string.
 
@@ -116,12 +116,12 @@ arli.countRest('Hello! مرحبا ۱۲۳', 'digit');
 
 Convert a date string to an Arabic format.
 
-#### Arguments
+##### Arguments
 
 - `str` (_String_):  The string to convert.
 - `[reverse]` (_Boolean_):  Reverse the month and day in the output if set to true.
 
-#### Returns
+##### Returns
 
 (_String_) an Arabic date format
 
@@ -138,7 +138,7 @@ arli.dateize('20/11/2015', true);
 
 Output the matched characters from the string.
 
-#### Arguments
+##### Arguments
 
 - `str` (_String_):  The string to output from.
 - `[type]` (_String_):  A regular expression pattern to be used.
@@ -147,7 +147,7 @@ You can use other patterns: `all`, `digit`, `every`, `letter`, `strict`, `punct`
 
 See [pattern options](#pattern-options) for more information.
 
-#### Returns
+##### Returns
 
 (_String_) the matched characters.
 
@@ -164,7 +164,7 @@ arli.extract('Hello مرحبا ۱۲۳', 'digit');
 
 Checks if the string has the matched pattern.
 
-#### Arguments
+##### Arguments
 
 - `str` (_String_):  The string to check.
 - `[type]` (_String_):  A regular expression pattern to be used.
@@ -173,7 +173,7 @@ You can use other patterns: `all`, `digit`, `every`, `letter`, `strict`, `punct`
 
 See [pattern options](#pattern-options) for more information.
 
-#### Returns
+##### Returns
 
 (_Boolean_) `true` if the pattern match, `else` otherwise.
 
@@ -192,7 +192,7 @@ arli.has('Hello مرحبا', 'digit');
 
 Calculate the percentage of the matched pattern in the string.
 
-#### Arguments
+##### Arguments
 
 - `str` (_String_):  The string to calculate in.
 - `[type]` (_String_):  A regular expression pattern to be used.
@@ -201,7 +201,7 @@ You can use other patterns: `all`, `digit`, `every`, `letter`, `strict`, `punct`
 
 See [pattern options](#pattern-options) for more information.
 
-#### Returns
+##### Returns
 
 (_Number_) the percentage of the matched pattern.
 
@@ -218,7 +218,7 @@ arli.how('Hello مرحبا،،،، ۱۲۳', 'char');
 
 Calculate the percentage of the non matched pattern in the string.
 
-#### Arguments
+##### Arguments
 
 - `str` (_String_):  The string to calculate in.
 - `[type]` (_String_):  A regular expression pattern to be used.
@@ -227,7 +227,7 @@ You can use other patterns: `all`, `digit`, `every`, `letter`, `strict`, `punct`
 
 See [pattern options](#pattern-options) for more information.
 
-#### Returns
+##### Returns
 
 (_Number_) the percentage of the non matched pattern.
 
@@ -244,11 +244,11 @@ arli.howRest('Hello مرحبا،،،، ۱۲۳', 'char');
 
 Convert a number string to an Arabic format.
 
-#### Arguments
+##### Arguments
 
 - `str` (_String_):  The string to convert.
 
-#### Returns
+##### Returns
 
 (_String_) an Arabic date format
 
@@ -263,7 +263,7 @@ arli.numerize('0123456789');
 
 Output the non matched characters from the string.
 
-#### Arguments
+##### Arguments
 
 - `str` (_String_):  The string to output from.
 - `[type]` (_String_):  A regular expression pattern to be used.
@@ -272,7 +272,7 @@ You can use other patterns: `all`, `digit`, `every`, `letter`, `strict`, `punct`
 
 See [pattern options](#pattern-options) for more information.
 
-#### Returns
+##### Returns
 
 (_String_) the non matched characters.
 
@@ -289,12 +289,12 @@ arli.remove('Hello مرحبا ۱۲۳', 'digit');
 
 Remove the dash or Tatweel character from the string.
 
-#### Arguments
+##### Arguments
 
 - `str` (_String_):  The string to remove from.
 - `[extra]` (_Boolean_):  Leave a single dash if set to true
 
-#### Returns
+##### Returns
 
 (_String_) the new prepared string.
 
