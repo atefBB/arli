@@ -1,0 +1,5 @@
+*.log
+/.local
+/bower_components
+/coverage
+/node_modules

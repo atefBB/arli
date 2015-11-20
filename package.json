@@ -1,0 +1,38 @@
+{
+  "name": "arli",
+  "version": "0.0.1",
+  "description": "Tools for an Arabic development",
+  "main": "dist/arli.js",
+  "scripts": {
+    "gulp": "gulp",
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/elkebirmed/arli.git"
+  },
+  "bugs": "https://github.com/elkebirmed/arli/issues",
+  "contributors": "https://github.com/elkebirmed/arli/graphs/contributors",
+  "keywords": [
+    "tool",
+    "functional",
+    "util",
+    "arabic",
+    "string"
+  ],
+  "author": "Mohamed Elkebir <elkebir.med@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.1.2",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.0",
+    "gulp-jscs": "^3.0.2",
+    "gulp-jshint": "^1.12.0",
+    "gulp-load-plugins": "^1.1.0",
+    "gulp-size": "^2.0.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.4.2",
+    "rimraf": "^2.4.3"
+  }
+}

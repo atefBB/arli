@@ -1,0 +1,32 @@
+{
+  "name": "arli",
+  "description": "Tools for an Arabic development",
+  "main": "dist/arli.js",
+  "authors": [
+    "Mohamed Elkebir <elkebir.med@gmail.com>",
+    "https://github.com/elkebirmed/arli/graphs/contributors"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "tool",
+    "functional",
+    "util",
+    "arabic",
+    "string"
+  ],
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals",
+    "node",
+    "yui"
+  ],
+  "homepage": "https://elkebirmed.github.io/arli",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
