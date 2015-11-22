@@ -23,10 +23,12 @@
   ],
   "homepage": "https://elkebirmed.github.io/arli",
   "ignore": [
-    "**/.*",
+    ".*",
     "node_modules",
     "bower_components",
     "test",
+    "src",
+    "package.json",
     "tests"
   ]
 }
