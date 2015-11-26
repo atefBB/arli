@@ -30,7 +30,18 @@
   };
 
   /** Arabic numbers list. */
-  var _arabicNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+  var _arabicNumbers = [
+    '٠', // Zerro
+    '١', // One
+    '٢', // Two
+    '٣', // Three
+    '٤', // Four
+    '٥', // Five
+    '٦', // Six
+    '٧', // Seven
+    '٨', // Eight
+    '٩', // Nine
+  ];
 
   /** Special Arabic characters. */
   var _arSpecialChars = [
@@ -59,6 +70,20 @@
    ****************************************************************************/
 
   /**
+   * Copies all properties from the source to the destination object.
+   *
+   * @private
+   * @param   {Object} destination - The object to receive the new properties.
+   * @param   {Object} source - The object whose properties will be duplicated.
+   * @returns {Boolean} Returns a new extended object.
+   */
+  function _extend(destination, source) {
+    for (var property in source)
+      destination[property] = source[property];
+    return destination;
+  }
+
+  /**
    * Checks if `value` is classified as a `String` primitive or object, and it's not empty.
    *
    * @private
@@ -72,7 +97,21 @@
   /*--------------------------------------------------------------------------*/
 
   /**
-   * Checks if a `option` is in the `arr` array.
+   * Checks if an `object` is a function.
+   *
+   * @private
+   * @param {*} obj - The object to check.
+   * @return {Boolean} Returns `true` if `obj` is a function, `false` otherwise.
+   */
+  function _isFunction(obj) {
+    var getType = {};
+    return obj && getType.toString.call(obj) === '[object Function]';
+  }
+
+  /*--------------------------------------------------------------------------*/
+
+  /**
+   * Checks if the `option` is in the `arr` array.
    *
    * @private
    * @param {Array} arr - The array to search in.
@@ -81,6 +120,21 @@
    */
   function _isIn(arr, option) {
     return Array.isArray(arr) && arr.indexOf(option) !== -1 ? true : false;
+  }
+
+  /*--------------------------------------------------------------------------*/
+
+  /**
+   * Checks if the `obj` is an object and has a specific option in it.
+   *
+   * @private
+   * @param {Object} obj - The object to check.
+   * @param {String} option - The property of the object.
+   * @param {*} value - The value of the property.
+   * @return {Boolean} Returns `true` if `obj` is an object, `false` otherwise.
+   */
+  function _isOption(obj, option, value) {
+    return obj !== null && typeof obj === 'object' && obj[option] === value;
   }
 
   /*--------------------------------------------------------------------------*/
@@ -127,7 +181,7 @@
    ****************************************************************************/
 
   /** Used as the semantic version number. */
-  var VERSION = '0.0.1';
+  var VERSION = '0.1.0';
 
   /*****************************************************************************
    * Public functions to be exported with the module.                          *
@@ -139,28 +193,31 @@
    * @static
    * @memberOf arli
    * @param {String} str - The string to convert.
-   * @param {Array} [options=['date', 'number', 'dash', 'char']] - Decide which features to use in the output.
+   * @param {Object} [options] - Options.
+   * @param {String} [options.date='normal'] - Date format [normal|reverse|none].
+   * @param {Boolean} [options.number=true] - Enable number convertion.
+   * @param {String} [options.dash='normal'] - Enable dash removing [normal|extra|none].
+   * @param {Boolean} [options.char=true] - Enable number convertion.
    * @returns {String} Return an Arabian string.
    * @example
    *
-   * arli.arabize('0123456789%(,;*)?');
-   * // => '۰۱۲۳۴۵۶۷۸۹٪﴾،؛٭﴿؟''
+   * arli.transform('0123456789%(,;*)?');
+   * // => '۰۱۲۳۴۵۶۷۸۹٪﴾،؛٭﴿؟'
    *
-   * arli.arabize('0123456789%(,;*)?', ['char']);
-   * // => '0123456789٪﴾،؛٭﴿؟''
+   * arli.transform('0123456789%(,;*)?', {number: false});
+   * // => '0123456789٪﴾،؛٭﴿؟'
    */
-  function arabize(str, options) {
+  function transform(str, options) {
+    options = _extend({number: true, char: true, date: 'normal', dash: 'normal'}, options || {});
+
     if (_initStr(str)) {
-      var defaultOptions = ['date', 'number', 'dash', 'char'];
-      options = options && _isArray(options) && options.length > 0 ? options : defaultOptions;
+      str = options.date === 'normal' && options.number ? dateize(str) : str;
+      str = options.date === 'reverse' && options.number ? dateize(str, {reverse: true}) : str;
+      str = options.number ? numerize(str) : str;
+      str = options.dash === 'normal' ? removeDash(str) : str;
+      str = options.dash === 'extra' ? removeDash(str, {extra: true}) : str;
 
-      str = _isIn(options, 'date') && !_isIn(options, 'date-reverse') ? dateize(str) : str;
-      str = _isIn(options, 'date-reverse') ? dateize(str, true) : str;
-      str = _isIn(options, 'number') || _isIn(options, 'date') || _isIn(options, 'date-reverse') ? numerize(str) : str;
-      str = _isIn(options, 'dash') && !_isIn(options, 'dasg-extra') ? removeDash(str) : str;
-      str = _isIn(options, 'dash-extra') ? removeDash(str, true) : str;
-
-      if (_isIn(options, 'char')) {
+      if (options.char) {
         for (var i = 0; i < _arSpecialChars.length; i++) {
           str = str.replace(_enSpecialChars[i], _arSpecialChars[i]);
         }
@@ -238,22 +295,52 @@
    * @static
    * @memberOf arli
    * @param {String} str - The string to convert.
-   * @param {Boolean} [reverse] - Reverse the month and day in the output if set to true.
+   * @param {Object} options - options.
+   * @param {Boolean} [options.reverse] - Reverse the month and day in the output if set to true.
    * @returns {String} Return an Arabic date format
    * @example
    *
    * arli.dateize('20,11,2015 20/11/2015 20-11-2015 20.11.2015 20 11 2015');
    * // => '20؍11؍2015 20؍11؍2015 20؍11؍2015 20؍11؍2015 20؍11؍2015'
    *
-   * arli.dateize('20/11/2015', true);
+   * arli.dateize('20/11/2015', {reverse: true});
    * // => '11؍20؍2015' // Past it to an RTL env to see it right
    */
-  function dateize(str, reverse) {
+  function dateize(str, options) {
+    options = _extend({}, options || {});
+
     if (_initStr(str)) {
       var regArabicDate = /\b([\d]{2})[\./,-\s]([\d]{2})[\./,-\s]([\d]{2}|[\d]{4})\b/g;
-      return reverse ? str.replace(regArabicDate, '$2' + '؍' + '$1' + '؍' + '$3') : str.replace(regArabicDate, '$1' + '؍' + '$2' + '؍' + '$3');
+      return options.reverse ? str.replace(regArabicDate, '$2' + '؍' + '$1' + '؍' + '$3') : str.replace(regArabicDate, '$1' + '؍' + '$2' + '؍' + '$3');
     } else {
       return str;
+    }
+  }
+
+  /*--------------------------------------------------------------------------*/
+
+  /**
+   * Extend the main module with plugins.
+   *
+   * @static
+   * @memberOf arli
+   * @param {String} name - The name of the method.
+   * @param {Function} cb - A callback function.
+   * @returns {Undefined}
+   * @example
+   *
+   * arli.extend('test', function(x) {
+   *   console.log(x + ' ' + arli._VERSION);
+   * });
+   *
+   * arli.test('We are in');
+   * // => 'We are in 0.0.1'
+   */
+
+  function extend(name, cb) {
+    if (_initStr(name) && _isFunction(cb)) {
+      if (name in arli === false) arli[name] = cb;
+      return;
     }
   }
 
@@ -418,19 +505,22 @@
    * @static
    * @memberOf arli
    * @param {String} str - The string to remove from.
-   * @param {Boolean} [extra] - Leave a single dash if set to true
+   * @param {Object} [options] - options.
+   * @param {Boolean} [options.extra] - Leave a single dash if set to true.
    * @returns {String} Return the new prepared string.
    * @example
    *
    * arli.removeDash('مرحبــــــــــا');
    * // => 'مرحبا'
    *
-   * arli.removeDash('مرحبــــــــــا', true);
+   * arli.removeDash('مرحبــــــــــا', {extra: true});
    * // => 'مرحبـا'
    */
-  function removeDash(str, extra) {
+  function removeDash(str, options) {
+    options = _extend({}, options || {});
+
     if (_initStr(str)) {
-      return extra ? str.replace(/ـ{2,}/g, 'ـ') : str.replace(/ـ/g, '');
+      return options.extra ? str.replace(/ـ{2,}/g, 'ـ') : str.replace(/ـ/g, '');
     } else {
       return str;
     }
@@ -440,22 +530,28 @@
    * Exporting the arli module to the outside world!                           *
    ****************************************************************************/
 
-  var arli = {
-    _VERSION: VERSION,
-    arabize: arabize,
-    count: count,
-    countRest: countRest,
-    dateize: dateize,
-    extract: extract,
-    has: has,
-    how: how,
-    howRest: howRest,
-    numerize: numerize,
-    remove: remove,
-    removeDash: removeDash,
-  };
+  /** Constructor */
+  function Ctor() {}
 
-  // CommonJS, AMD, script tag
+  /** Prototypes */
+  Ctor.prototype._VERSION =   VERSION;
+  Ctor.prototype.transform =    transform;
+  Ctor.prototype.count =      count;
+  Ctor.prototype.countRest =  countRest;
+  Ctor.prototype.dateize =    dateize;
+  Ctor.prototype.extract =    extract;
+  Ctor.prototype.has =        has;
+  Ctor.prototype.how =        how;
+  Ctor.prototype.howRest =    howRest;
+  Ctor.prototype.numerize =   numerize;
+  Ctor.prototype.remove =     remove;
+  Ctor.prototype.removeDash = removeDash;
+  Ctor.prototype.extend =     extend;
+
+  /** arli object from Ctor */
+  var arli = new Ctor();
+
+  /** CommonJS, AMD, script tag */
   if (typeof exports !== 'undefined') {
     module.exports = arli;
   } else if (typeof define === 'function' && define.amd) {

@@ -8,6 +8,7 @@ var $           = require('gulp-load-plugins')();
 // Containing project constants
 var config = {
   entryFile: './src/index.js',
+  testFile: '/test/index.js',
   outputDir: './dist/',
   outputFile: 'arli.js',
 };
@@ -49,4 +50,10 @@ gulp.task('build', ['clean', 'lint'], function() {
     .pipe($.sourcemaps.write('.'))
     .pipe($.size({title: 'arli.min.js'}))
     .pipe(gulp.dest(config.outputDir));
+});
+
+// Testing arli
+gulp.task('test', function() {
+  return gulp.src(config.testFile, {read: false})
+    .pipe($.mocha({reporter: 'list', globals: ['arli']}));
 });
