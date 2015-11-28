@@ -1,59 +1,53 @@
 'use strict';
 
-// Requiring modules
-var gulp        = require('gulp');
-var rm          = require('rimraf');
-var $           = require('gulp-load-plugins')();
+var gulp = require('gulp');
+var jscs = require('gulp-jscs');
+var mocha = require('gulp-mocha');
+var rename = require('gulp-rename');
+var runSequence = require('run-sequence');
+var sourcemaps = require('gulp-sourcemaps');
+var uglify = require('gulp-uglify');
 
-// Containing project constants
-var config = {
-  entryFile: './src/index.js',
-  testFile: './test/index.js',
-  outputDir: './dist/',
-  outputFile: 'arli.js',
-};
-
-// Cleaning the dist folder
-gulp.task('clean', function(cb) {
-  rm(config.outputDir, cb);
+gulp.task('jscs', function() {
+  return gulp.src(['./*.js', './src/*.js', './test/*.js'])
+    .pipe(jscs())
+    .pipe(jscs.reporter());
 });
 
-// Check errors and code style
-gulp.task('lint', function() {
-  return gulp.src(['./gulpfile.js', './src/*.js'])
-    .pipe($.jshint())
-    .pipe($.jshint.reporter('default', { verbose: true }))
-    .pipe($.jshint.reporter('fail'))
-    .pipe($.jscs())
-    .pipe($.jscs.reporter())
-    .pipe($.jscs.reporter('fail'));
-});
+gulp.task('uglify', function() {
+  gulp.src('./src/index.js')
+    .pipe(rename('arli.js'))
+    .pipe(gulp.dest('./dist/'));
 
-// Building the main script with a minefied version and a sourcemap with it after babeling it
-gulp.task('build', ['clean', 'lint'], function() {
-  gulp.src(config.entryFile)
-    .pipe($.sourcemaps.init())
-    .pipe($.babel({
-      presets: ['es2015'],
-    }))
-    .pipe($.rename('arli.js'))
-    .pipe($.sourcemaps.write('.'))
-    .pipe($.size({title: 'arli.js'}))
-    .pipe(gulp.dest(config.outputDir));
-
-  return gulp.src(config.entryFile)
-    .pipe($.sourcemaps.init())
-    .pipe($.uglify({
+  return gulp.src('./src/index.js')
+    .pipe(rename('arli.min.js'))
+    .pipe(sourcemaps.init())
+    .pipe(uglify({
       preserveComments: 'license',
     }))
-    .pipe($.rename('arli.min.js'))
-    .pipe($.sourcemaps.write('.'))
-    .pipe($.size({title: 'arli.min.js'}))
-    .pipe(gulp.dest(config.outputDir));
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('./dist/'));
 });
 
-// Testing arli
 gulp.task('test', function() {
-  return gulp.src(config.testFile, {read: false})
-    .pipe($.mocha({reporter: 'spec', growl: 1}));
+  return gulp.src('./test/index.js')
+    .pipe(mocha({
+      reporter: 'spec',
+      require: ['should'],
+    }))
+    .once('error', function() {
+      process.exit(1);
+    });
+});
+
+gulp.task('watch', function() {
+  gulp.watch(['./*.js', './src/*.js', './test/*.js'], ['default']);
+});
+
+gulp.task('default', function() {
+  runSequence('jscs', 'test');
+});
+
+gulp.task('build', function() {
+  runSequence('jscs', 'test', 'uglify');
 });
