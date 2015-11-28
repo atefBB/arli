@@ -9,6 +9,7 @@
    * Private constants to use inside the library.                              *
    * **************************************************************************/
 
+  /** Indian digits format */
   var INDIAN_DIGITS = [
     '٠', // Zero
     '١', // One
@@ -22,11 +23,14 @@
     '٩', // Nine
   ];
 
-  var DATE_SEP = '*';
+  /** Arabic date separator */
+  var ARABIC_DATE_SEP = '؍';
 
-  var REG_DATE_DMY = /^(31|30|[0-2][0-9])(-|,|\/|\.)(12|11|10|0[1-9])(-|,|\/|\.)(\d{4}|\d{2})$/gm;
+  /** Date format: DD/MM/YY[YY] DD.MM.YY[YY] DD-MM-YY[YY] DD,MM,YY[YY]*/
+  var REG_DATE_DMY = /\b(31|30|(?:0[1-9]|[1-2][0-9]))(\/|\.|-|,)(12|11|0[1-9])(\2)(\d{4}|\d{2})\b/gm;
 
-  var REG_DATE_MDY = /^(12|11|10|0[1-9])(-|,|\/|\.)(31|30|[0-2][0-9])(-|,|\/|\.)(\d{4}|\d{2})$/gm;
+  /** Date format: MM/DD/YY[YY] MM.DD.YY[YY] MM-DD-YY[YY] MM,DD,YY[YY]*/
+  var REG_DATE_MDY = /\b(12|11|0[1-9])(\/|\.|-|,)(31|30|(?:0[1-9]|[1-2][0-9]))(\2)(\d{4}|\d{2})\b/gm;
 
   /* ***************************************************************************
    * Private functions to use inside the library.                              *
@@ -46,7 +50,7 @@
     }
 
     return destination;
-  };
+  }
 
   /* -------------------------------------------------------------------------*/
 
@@ -59,7 +63,7 @@
    */
   function _isString(value) {
     return (typeof value === 'string' || value instanceof String) && value !== 'undefined' && value !== '';
-  };
+  }
 
   /* -------------------------------------------------------------------------*/
 
@@ -73,7 +77,7 @@
   function _isFunction(value) {
     var getType = {};
     return value && getType.toString.call(value) === '[object Function]';
-  };
+  }
 
   /* ***************************************************************************
    * Public constants to be exported with the module.                          *
@@ -93,17 +97,40 @@
    * @param  {String} string - String to Transform.
    * @param  {Object} [options] - Options of transforming.
    * @param  {Boolean} [options.digit=true] - Enable or disable digit transforming.
+   * @param  {Boolean} [options.date=true] - Enable or disable date transforming.
+   * @param  {String} [options.dateFrom='all|DMY|MDY'] - What date format to get from the string.
+   * @param  {String} [options.dateTo='all|DMY|MDY'] - What date format to output in the string.
    * @returns {String} Returns a new transformed string.
    *
    * @examples
    */
   function transform(string, options) {
-    options = _assign({
+    options = _assign({ // Assign default options.
       digit: true,
-      didactic: true,
+      date: true,
+      dateFrom: 'all',
+      dateTo: 'all',
     }, options || {});
 
     if (_isString(string)) {
+      // Converting date formats.
+      if (options.dateTo === 'DMY') { // From MM/DD to DD/MM
+        string = string.replace(REG_DATE_MDY, '$3$2$1$4$5');
+      } else if (options.dateTo === 'MDY') { // From DD/MM to MM/DD
+        string = string.replace(REG_DATE_DMY, '$3$2$1$4$5');
+      }
+
+      // Transforming dates to the Arabic format if digit is true.
+      if (options.date && options.digit) {
+        if (options.dateFrom === 'all' || options.dateFrom === 'DMY') { // Get DD/MM/YY[YY]
+          string = string.replace(REG_DATE_DMY, '$1' + ARABIC_DATE_SEP + '$3' + ARABIC_DATE_SEP + '$5');
+        }
+
+        if (options.dateFrom === 'all' || options.dateFrom === 'MDY') { // Get MM/DD/YY[YY]
+          string = string.replace(REG_DATE_MDY, '$1' + ARABIC_DATE_SEP + '$3' + ARABIC_DATE_SEP + '$5');
+        }
+      }
+
       // Transforming Arabic digits to Indian digits.
       string = options.digit ? string.replace(/[0-9]/g, function(val) {
         return INDIAN_DIGITS[+val];
@@ -113,14 +140,14 @@
     } else {
       return '';
     }
-  };
+  }
 
   /* ***************************************************************************
    * Exporting the arli module to the outside world!                           *
    * **************************************************************************/
 
   /** Constructor */
-  function Ctor() {};
+  function Ctor() {}
 
   /** Prototypes */
   Ctor.prototype._VERSION = VERSION;
