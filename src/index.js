@@ -27,10 +27,10 @@
   var ARABIC_DATE_SEP = '؍';
 
   /** Date format: DD/MM/YY[YY] DD.MM.YY[YY] DD-MM-YY[YY] DD,MM,YY[YY]*/
-  var REG_DATE_DMY = /\b(31|30|(?:0[1-9]|[1-2][0-9]))(\/|\.|-|,)(12|11|0[1-9])(\2)(\d{4}|\d{2})\b/gm;
+  var REG_DATE_DMY = /\b(31|30|(?:0[1-9]|[1-2][0-9]))(\/|\.|-|,)(12|11|10|0[1-9])(\2)(\d{4}|\d{2})\b/gm;
 
   /** Date format: MM/DD/YY[YY] MM.DD.YY[YY] MM-DD-YY[YY] MM,DD,YY[YY]*/
-  var REG_DATE_MDY = /\b(12|11|0[1-9])(\/|\.|-|,)(31|30|(?:0[1-9]|[1-2][0-9]))(\2)(\d{4}|\d{2})\b/gm;
+  var REG_DATE_MDY = /\b(12|11|10|0[1-9])(\/|\.|-|,)(31|30|(?:0[1-9]|[1-2][0-9]))(\2)(\d{4}|\d{2})\b/gm;
 
   /* ***************************************************************************
    * Private functions to use inside the library.                              *
