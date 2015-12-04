@@ -1,469 +1,278 @@
-'use strict';
-
-/**
- * @license
- * arli.js 0.0.1
+/*!
+ * arli.js 0.2.0
  * https://elkebirmed.github.io/arli
  * (c) 2015 Mohamed Elkebir <elkebir.med@gmail.com>
  * Arli may be freely distributed under the MIT license.
  */
-(function (global) {
-
-  /*****************************************************************************
+(function(global) {
+  /* ***************************************************************************
    * Private constants to use inside the library.                              *
-   ****************************************************************************/
+   * **************************************************************************/
 
-  /** Regular expression patterns. */
-  var _regs = {
-    ra: /[\u0621-\u0652]/g, // Arabic characters.
-    ran: /[^\u0621-\u0652]/g, // Non Arabic characters.
-    ral: /[\u0621-\u063A\u0641-\u064A]/g, // Arabic letters.
-    raln: /[^\u0621-\u063A\u0641-\u064A]/g, // Non Arabic letters.
-    ras: /[\u0621-\u063A\u0640-\u0652]/g, // Strict Arabic characters.
-    rasn: /[^\u0621-\u063A\u0640-\u0652]/g, // Non strict Arabic characters.
-    raa: /[\u0600-\u06FF]/g, // All Arabic standard characters.
-    raan: /[^\u0600-\u06FF]/g, // Non all Arabic.
-    rae: /[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF]/g, // Every Arabic characters.
-    raen: /[^\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF]/g, // Non every Arabic characters.
-    rap: /[\u064B-\u0652]/g, // Arabic punctuation characters.
-    rapn: /[^\u064B-\u0652]/g, // Non Arabic punctuation characters.
-    rad: /[\u0660-\u0669]/g, // Arabic digits.
-    radn: /[^\u0660-\u0669]/g };
+  /** Arabic date separator */
+  var ARABIC_DATE_SEP = '؍';
 
-  /** Arabic numbers list. */
-  // Non Arabic digits.
-  var _arabicNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+  /** Arabic decimal separator */
+  var ARABIC_DECIMAL_SEP = '٫';
 
-  /** Special Arabic characters. */
-  var _arSpecialChars = ['،', // Comma.
-  '؛', // SemiColon.
-  '؟', // Question Mark.
-  '٪', // Percent Sign.
-  '٭', // Asterisk.
-  '﴿', // Right parenthesis.
-  '﴾'];
+  /** Arabic punctuation marks and their replacements */
+  var ARABIC_PUNC_AND_REPLACEMENTS = [
+    [
+      ',', // Comma
+      ';', // Semicolon
+      '?', // Question mark
+      '(', // Left parenthesis
+      ')', // Right parenthesis
+      '%', // Percent sign
+    ],
+    [
+      '،', // Comma
+      '؛', // Semicolon
+      '؟', // Question mark
+      '﴾', // Left parenthesis
+      '﴿', // Right parenthesis
+      '٪', // Percent sign
+    ]
+  ];
 
-  /** Special English characters. */
-  // Left parenthesis.
-  var _enSpecialChars = [',', // Comma.
-  ';', // SemiColon.
-  '?', // Question Mark.
-  '%', // Percent Sign.
-  '*', // Asterisk.
-  ')', // Right parenthesis.
-  '('];
+  /** Arabic tatweel */
+  var ARABIC_TATWEEL = 'ـ';
 
-  /*****************************************************************************
+  /** Arabic thousands separator */
+  var ARABIC_THOUSANDS_SEP = '٬';
+
+  /** Arabic word ligatures replacements */
+  var ARABIC_WORD_LIGATURES = [
+    [
+      'صلى الله عليه و سلم', // Sallallahou Alayhe Wassallam
+      'ﷺ',
+      'ؐ'
+    ],
+    [
+      'جل جلاله', // Jalla Jalalouhou
+      'ﷻ'
+    ],
+    [
+      'عليه السلام', // Alayhe Assallam
+      'ؑ'
+    ],
+    [
+      'رحمة الله عليه', // Rahmatu Allahi Alayhe
+      'ؒ'
+    ],
+    [
+      'رضي الله عنه', // Radi Allahou Anhu
+      'ؓ'
+    ]
+  ];
+
+  /** Indian digits format */
+  var INDIAN_DIGITS = [
+    '٠', // Zero
+    '١', // One
+    '٢', // Two
+    '٣', // Three
+    '٤', // Four
+    '٥', // Five
+    '٦', // Six
+    '٧', // Seven
+    '٨', // Eight
+    '٩', // Nine
+  ];
+
+  /** Arabic tatweel */
+  var REG_ARABIC_TATWEEL = /\u0640+/gm;
+
+  /** Date format: DD/MM/YY[YY] DD.MM.YY[YY] DD-MM-YY[YY] DD,MM,YY[YY] */
+  var REG_DATE_DMY = /(?=\D?)(31|30|(?:0[1-9]|[1-2][0-9]))(\/|\.|-|,)(12|11|10|0[1-9])(\2)(\d{4}|\d{2})(?=\D?)/gm;
+
+  /** Date format: MM/DD/YY[YY] MM.DD.YY[YY] MM-DD-YY[YY] MM,DD,YY[YY] */
+  var REG_DATE_MDY = /(?=\D?)(12|11|10|0[1-9])(\/|\.|-|,)(31|30|(?:0[1-9]|[1-2][0-9]))(\2)(\d{4}|\d{2})(?=\D?)/gm;
+
+  /** Full number with decimal separator */
+  var REG_NUMBER_D = /((?:0[0-9])|(?:[1-9]\d+))\.(\d+)/gm;
+
+  /** Full number with decimal and thousand separators */
+  var REG_NUMBER_DT = /[1-9][0-9]{0,2}(?:,\d{3})+\.\d+/gm;
+
+  /* ***************************************************************************
    * Private functions to use inside the library.                              *
-   ****************************************************************************/
+   * **************************************************************************/
 
   /**
-   * Checks if `value` is classified as a `String` primitive or object, and it's not empty.
+   * Assign `source` properties to `destination` object if not existed in it.
    *
    * @private
-   * @param   {*} value - A value to check.
-   * @returns {Boolean} Returns `true` if `value` is a string, `false` otherwise.
+   * @param  {Object} destination - Destination object.
+   * @param  {Object} source - Source object.
+   * @returns {Object} Returns a new extended object.
    */
-  // Left parenthesis.
-  function _initStr(value) {
+  function _assign(destination, source) {
+    for (var property in source) {
+      destination[property] = source[property];
+    }
+
+    return destination;
+  }
+
+  /* -------------------------------------------------------------------------*/
+
+  /**
+   * Checks if `value` is a string and is not undefined or empty.
+   *
+   * @private
+   * @param  {*} value - Value to check.
+   * @returns {Boolean} Returns true if `value` is String, else otherwise.
+   */
+  function _isString(value) {
     return (typeof value === 'string' || value instanceof String) && value !== 'undefined' && value !== '';
   }
 
-  /*--------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------*/
 
   /**
-   * Checks if a `option` is in the `arr` array.
+   * Checks if `value` is a function.
    *
    * @private
-   * @param {Array} arr - The array to search in.
-   * @param {String} option - The option to find in the array.
-   * @return {Boolean} Returns `true` if `option` is inside `arr`, `false` otherwise.
+   * @param  {*}  value - Value to check.
+   * @returns {Boolean} Returns true if `value` is object, else otherwise.
    */
-  function _isIn(arr, option) {
-    return Array.isArray(arr) && arr.indexOf(option) !== -1 ? true : false;
+  function _isFunction(value) {
+    var getType = {};
+    return value && getType.toString.call(value) === '[object Function]';
   }
 
-  /*--------------------------------------------------------------------------*/
-
-  /**
-   * Extract a specified RegExp pattern from `_regs` object.
-   *
-   * @private
-   * @param {String} [type] - A pattern to be used.
-   * @param {Boolean} [negative] - Get the nehative pattern if set to `true`.
-   * @returns {RegExp} Returns a regular expression pattern.
-   */
-  function _regType(type, negative) {
-    var result;
-
-    switch (type) {
-      case 'strict':
-        result = 'ras';
-        break;
-      case 'all':
-        result = 'raa';
-        break;
-      case 'letter':
-        result = 'ral';
-        break;
-      case 'every':
-        result = 'rae';
-        break;
-      case 'punct':
-        result = 'rap';
-        break;
-      case 'digit':
-        result = 'rad';
-        break;
-      default:
-        result = 'ra';
-    }
-
-    return negative ? _regs[result + 'n'] : _regs[result];
-  }
-
-  /*****************************************************************************
+  /* ***************************************************************************
    * Public constants to be exported with the module.                          *
-   ****************************************************************************/
+   * **************************************************************************/
 
   /** Used as the semantic version number. */
-  var VERSION = '0.0.1';
+  var VERSION = '0.2.0';
 
-  /*****************************************************************************
+  /* ***************************************************************************
    * Public functions to be exported with the module.                          *
-   ****************************************************************************/
+   * **************************************************************************/
 
   /**
-   * Convert some characters to make the text more Arabian.
+   * Transform a string to be more Arabian.
    *
-   * @static
-   * @memberOf arli
-   * @param {String} str - The string to convert.
-   * @param {Array} [options=['date', 'number', 'dash', 'char']] - Decide which features to use in the output.
-   * @returns {String} Return an Arabian string.
-   * @example
+   * @public
+   * @param  {String} string - String to Transform.
+   * @param  {Object} [options] - Options of transforming.
+   * @param  {Boolean} [options.date=true] - Enable or disable date transforming.
+   * @param  {String} [options.dateFrom='all|DMY|MDY'] - What date format to get from the string.
+   * @param  {String} [options.dateTo='all|DMY|MDY'] - What date format to output in the string.
+   * @param  {Boolean} [options.digit=true] - Enable or disable digit transforming.
+   * @param  {String} [options.excludePunc] - Exclude some punctuations from transforming by putting a regular expression source like: `',|;'`.
+   * @param  {Boolean} [options.ligatures=true] - Enable or disable transforming word ligatures.
+   * @param  {Number} [options.ligaturesDeep=1] - More ligatures are deeper so you can pass a deep level ti look for.
+   * @param  {Boolean} [options.punc=true] - Enable or disable punctuation transforming.
+   * @param  {String} [options.removeTatweel='extra|all|none'] - Remove extra tatweel or all or leave it as is.
+   * @returns {String} Returns a new transformed string.
    *
-   * arli.arabize('0123456789%(,;*)?');
-   * // => '۰۱۲۳۴۵۶۷۸۹٪﴾،؛٭﴿؟''
-   *
-   * arli.arabize('0123456789%(,;*)?', ['char']);
-   * // => '0123456789٪﴾،؛٭﴿؟''
+   * @examples
    */
-  function arabize(str, options) {
-    if (_initStr(str)) {
-      var defaultOptions = ['date', 'number', 'dash', 'char'];
-      options = options && _isArray(options) && options.length > 0 ? options : defaultOptions;
+  function transform(string, options) {
+    options = _assign({ // Assign default options.
+      date: true,
+      dateFrom: 'all',
+      dateTo: 'all',
+      digit: true,
+      excludePunc: ' ',
+      ligatures: true,
+      ligaturesDeep: 1,
+      numberSep: true,
+      punc: true,
+      removeTatweel: 'extra',
+    }, options || {});
 
-      str = _isIn(options, 'date') && !_isIn(options, 'date-reverse') ? dateize(str) : str;
-      str = _isIn(options, 'date-reverse') ? dateize(str, true) : str;
-      str = _isIn(options, 'number') || _isIn(options, 'date') || _isIn(options, 'date-reverse') ? numerize(str) : str;
-      str = _isIn(options, 'dash') && !_isIn(options, 'dasg-extra') ? removeDash(str) : str;
-      str = _isIn(options, 'dash-extra') ? removeDash(str, true) : str;
+    if (_isString(string)) {
+      // Converting date formats.
+      if (options.dateTo === 'DMY') { // From MM/DD to DD/MM
+        string = string.replace(REG_DATE_MDY, '$3$2$1$4$5');
+      } else if (options.dateTo === 'MDY') { // From DD/MM to MM/DD
+        string = string.replace(REG_DATE_DMY, '$3$2$1$4$5');
+      }
 
-      if (_isIn(options, 'char')) {
-        for (var i = 0; i < _arSpecialChars.length; i++) {
-          str = str.replace(_enSpecialChars[i], _arSpecialChars[i]);
+      // Transforming dates to the Arabic format if digit is true.
+      if (options.date && options.digit) {
+        if (options.dateFrom === 'all' || options.dateFrom === 'DMY') { // Get DD/MM/YY[YY]
+          string = string.replace(REG_DATE_DMY, '$1' + ARABIC_DATE_SEP + '$3' + ARABIC_DATE_SEP + '$5');
+        }
+
+        if (options.dateFrom === 'all' || options.dateFrom === 'MDY') { // Get MM/DD/YY[YY]
+          string = string.replace(REG_DATE_MDY, '$1' + ARABIC_DATE_SEP + '$3' + ARABIC_DATE_SEP + '$5');
         }
       }
 
-      return str;
+      // Transforming numbers separators.
+      string = options.numberSep ? string.replace(REG_NUMBER_DT, function(match) {
+        match = match.replace(/,/g, ARABIC_THOUSANDS_SEP);
+        return match.replace('.', ARABIC_DECIMAL_SEP);
+      }) : string;
+
+      string = options.numberSep ? string.replace(REG_NUMBER_D, '$1' + ARABIC_DECIMAL_SEP + '$2') : string;
+
+      // Transforming Arabic digits to Indian digits.
+      string = options.digit ? string.replace(/[0-9]/g, function(val) {
+        return INDIAN_DIGITS[+val];
+      }) : string;
+
+      // Transforming Latin punctuations to Arabic.
+      if (options.punc) {
+        var exclude = new RegExp(options.excludePunc);
+
+        for (var i = 0; i < ARABIC_PUNC_AND_REPLACEMENTS[0].length; i++) {
+          if (!exclude.test(ARABIC_PUNC_AND_REPLACEMENTS[0][i])) {
+            string = string.replace(ARABIC_PUNC_AND_REPLACEMENTS[0][i], ARABIC_PUNC_AND_REPLACEMENTS[1][i]);
+          }
+        }
+      }
+
+      // Remove Tatweel
+      string = options.removeTatweel === 'extra' ? string.replace(REG_ARABIC_TATWEEL, ARABIC_TATWEEL) : string;
+      string = options.removeTatweel === 'all' ? string.replace(REG_ARABIC_TATWEEL, '') : string;
+
+      // Transforming word ligatures.
+      if (options.ligatures) {
+        for (var i = 0; i < ARABIC_WORD_LIGATURES.length; i++) {
+          if (ARABIC_WORD_LIGATURES[i][2] && options.ligaturesDeep === 2) {
+            string = string.replace(ARABIC_WORD_LIGATURES[i][0], ARABIC_WORD_LIGATURES[i][2]);
+          } else {
+            string = string.replace(ARABIC_WORD_LIGATURES[i][0], ARABIC_WORD_LIGATURES[i][1]);
+          }
+        }
+      }
+
+      return string;
     } else {
-      return str;
+      return '';
     }
   }
 
-  /*--------------------------------------------------------------------------*/
-
-  /**
-   * Count the matched characters in the string.
-   *
-   * @static
-   * @memberOf arli
-   * @param {String} str - The string to count in.
-   * @param {String} [type] - A regular expression pattern to be used.
-   * @returns {Number} Return the number of the matched characters in the string.
-   * @example
-   *
-   * arli.count('Hello!');
-   * // => 0
-   *
-   * arli.count('Hello! مرحبا');
-   * // => 5
-   *
-   * arli.count('Hello! مرحبا ۱۲۳', 'digit');
-   * // => 3
-   */
-  function count(str, type) {
-    if (_initStr(str)) {
-      return (str.match(_regType(type)) || '').length;
-    } else {
-      return 0;
-    }
-  }
-
-  /*--------------------------------------------------------------------------*/
-
-  /**
-   * Count the non matched characters in the string.
-   *
-   * @static
-   * @memberOf arli
-   * @param {String} str - The string to count in.
-   * @param {String} [type] - A regular expression pattern to be used.
-   * @returns {Number} Return the number of the non matched characters in the string.
-   * @example
-   *
-   * arli.countRest('Hello!');
-   * // => 6
-   *
-   * arli.countRest('Hello! مرحبا');
-   * // => 7
-   *
-   * arli.countRest('Hello! مرحبا ۱۲۳', 'digit');
-   * // => 13
-   */
-  function countRest(str, type) {
-    if (_initStr(str)) {
-      return (str.match(_regType(type, true)) || '').length;
-    } else {
-      return 0;
-    }
-  }
-
-  /*--------------------------------------------------------------------------*/
-
-  /**
-   * Convert a date string to an Arabic format.
-   *
-   * @static
-   * @memberOf arli
-   * @param {String} str - The string to convert.
-   * @param {Boolean} [reverse] - Reverse the month and day in the output if set to true.
-   * @returns {String} Return an Arabic date format
-   * @example
-   *
-   * arli.dateize('20,11,2015 20/11/2015 20-11-2015 20.11.2015 20 11 2015');
-   * // => '20؍11؍2015 20؍11؍2015 20؍11؍2015 20؍11؍2015 20؍11؍2015'
-   *
-   * arli.dateize('20/11/2015', true);
-   * // => '11؍20؍2015' // Past it to an RTL env to see it right
-   */
-  function dateize(str, reverse) {
-    if (_initStr(str)) {
-      var regArabicDate = /\b([\d]{2})[\./,-\s]([\d]{2})[\./,-\s]([\d]{2}|[\d]{4})\b/g;
-      return reverse ? str.replace(regArabicDate, '$2' + '؍' + '$1' + '؍' + '$3') : str.replace(regArabicDate, '$1' + '؍' + '$2' + '؍' + '$3');
-    } else {
-      return str;
-    }
-  }
-
-  /*--------------------------------------------------------------------------*/
-
-  /**
-   * Output the matched characters from the string.
-   *
-   * @static
-   * @memberOf arli
-   * @param {String} str - The string to output from.
-   * @param {String} [type] - A regular expression pattern to be used.
-   * @returns {String} Return the matched characters.
-   * @example
-   *
-   * arli.extract('Hello مرحبا');
-   * // => 'مرحبا'
-   *
-   * arli.extract('Hello مرحبا ۱۲۳', 'digit');
-   * // => '۱۲۳'
-   */
-  function extract(str, type) {
-    if (_initStr(str)) {
-      return str.replace(_regType(type, true), '');
-    } else {
-      return str;
-    }
-  }
-
-  /*--------------------------------------------------------------------------*/
-
-  /**
-   * Checks if the string has the matched pattern.
-   *
-   * @static
-   * @memberOf arli
-   * @param {String} str - The string to check.
-   * @param {String} [type] - A regular expression pattern to be used.
-   * @returns {Boolean} Return `true` if the pattern match, `else` otherwise.
-   * @example
-   *
-   * arli.has('Hello مرحبا');
-   * // => true
-   *
-   * arli.has('Hello مرحبا ۱۲۳', 'digit');
-   * // => true
-   *
-   * arli.has('Hello مرحبا', 'digit');
-   * // => false
-   */
-  function has(str, type) {
-    if (_initStr(str)) {
-      return _regType(type).test(str) ? true : false;
-    } else {
-      return false;
-    }
-  }
-
-  /*--------------------------------------------------------------------------*/
-
-  /**
-   * Calculate the percentage of the matched pattern in the string.
-   *
-   * @static
-   * @memberOf arli
-   * @param {String} str - The string to calculate in.
-   * @param {String} [type] - A regular expression pattern to be used.
-   * @returns {Number} Return the percentage of the matched pattern.
-   * @example
-   *
-   * arli.how('Hello مرحبا');
-   * // => 45.45454545454545
-   *
-   * arli.how('Hello مرحبا،،،، ۱۲۳', 'char');
-   * // => 26.31578947368421
-   */
-  function how(str, type) {
-    if (has(str, type)) {
-      return count(str, type) / str.length * 100;
-    } else {
-      return 0;
-    }
-  }
-
-  /*--------------------------------------------------------------------------*/
-
-  /**
-   * Calculate the percentage of the non matched pattern in the string.
-   *
-   * @static
-   * @memberOf arli
-   * @param {String} str - The string to calculate in.
-   * @param {String} [type] - A regular expression pattern to be used.
-   * @returns {Number} Return the percentage of the non matched pattern.
-   * @example
-   *
-   * arli.howRest('Hello مرحبا');
-   * // => 54.54545454545455
-   *
-   * arli.howRest('Hello مرحبا،،،، ۱۲۳', 'char');
-   * // => 73.6842105263158
-   */
-  function howRest(str, type) {
-    return 100 - how(str, type);
-  }
-
-  /*--------------------------------------------------------------------------*/
-
-  /**
-   * Convert a number string to an Arabic format.
-   *
-   * @static
-   * @memberOf arli
-   * @param {String} str - The string to convert.
-   * @returns {String} Return an Arabic date format
-   * @example
-   *
-   * arli.numerize('0123456789');
-   * // => '۰۱۲۳۴۵۶۷۸۹'
-   */
-  function numerize(str) {
-    if (_initStr(str)) {
-      return str.replace(/[0-9]/g, function (n) {
-        return _arabicNumbers[+n];
-      });
-    } else {
-      return str;
-    }
-  }
-
-  /*--------------------------------------------------------------------------*/
-
-  /**
-   * Output the non matched characters from the string.
-   *
-   * @static
-   * @memberOf arli
-   * @param {String} str - The string to output from.
-   * @param {String} [type] - A regular expression pattern to be used.
-   * @returns {String} Return the non matched characters.
-   * @example
-   *
-   * arli.remove('Hello مرحبا');
-   * // => 'Hello '
-   *
-   * arli.remove('Hello مرحبا ۱۲۳', 'digit');
-   * // => 'Hello  مرحبا'
-   */
-  function remove(str, type) {
-    if (_initStr(str)) {
-      return str.replace(_regType(type), '');
-    } else {
-      return str;
-    }
-  }
-
-  /*--------------------------------------------------------------------------*/
-
-  /**
-   * Remove the dash or Tatweel character from the string.
-   *
-   * @static
-   * @memberOf arli
-   * @param {String} str - The string to remove from.
-   * @param {Boolean} [extra] - Leave a single dash if set to true
-   * @returns {String} Return the new prepared string.
-   * @example
-   *
-   * arli.removeDash('مرحبــــــــــا');
-   * // => 'مرحبا'
-   *
-   * arli.removeDash('مرحبــــــــــا', true);
-   * // => 'مرحبـا'
-   */
-  function removeDash(str, extra) {
-    if (_initStr(str)) {
-      return extra ? str.replace(/ـ{2,}/g, 'ـ') : str.replace(/ـ/g, '');
-    } else {
-      return str;
-    }
-  }
-
-  /*****************************************************************************
+  /* ***************************************************************************
    * Exporting the arli module to the outside world!                           *
-   ****************************************************************************/
+   * **************************************************************************/
 
-  var arli = {
-    _VERSION: VERSION,
-    arabize: arabize,
-    count: count,
-    countRest: countRest,
-    dateize: dateize,
-    extract: extract,
-    has: has,
-    how: how,
-    howRest: howRest,
-    numerize: numerize,
-    remove: remove,
-    removeDash: removeDash
-  };
+  /** Constructor */
+  function Ctor() {}
 
-  // CommonJS, AMD, script tag
+  /** Prototypes */
+  Ctor.prototype._VERSION = VERSION;
+  Ctor.prototype.transform = transform;
+
+  /** arli object from Ctor */
+  var arli = new Ctor();
+
+  /** CommonJS, AMD, script tag */
   if (typeof exports !== 'undefined') {
     module.exports = arli;
   } else if (typeof define === 'function' && define.amd) {
-    define(function () {
+    define(function() {
       return arli;
     });
   } else {
     global.arli = arli;
   }
+
 })(typeof global !== 'undefined' ? global : window);
-//# sourceMappingURL=arli.js.map
