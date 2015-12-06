@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var jscs = require('gulp-jscs');
+var jsdoc = require('gulp-jsdoc');
 var mocha = require('gulp-mocha');
 var rename = require('gulp-rename');
 var runSequence = require('run-sequence');
@@ -38,6 +39,11 @@ gulp.task('test', function() {
     .once('error', function() {
       process.exit(1);
     });
+});
+
+gulp.task('doc', function() {
+  gulp.src('./src/*.js')
+    .pipe(jsdoc('./docs'));
 });
 
 gulp.task('watch', function() {

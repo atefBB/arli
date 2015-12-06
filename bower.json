@@ -1,6 +1,6 @@
 {
   "name": "arli",
-  "description": "Tools for an Arabic development",
+  "description": "JavaScript tools for an Arabic development",
   "main": "dist/arli.js",
   "authors": [
     "Mohamed Elkebir <elkebir.med@gmail.com>",
