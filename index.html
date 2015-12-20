@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>arli - JavaScript tools for an Arabiv development</title>
+    <meta name="description" content="آرلي - أدوات جافاسكريبت لتطوير عربي">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="foundation-rtl/css/foundation.min.css">
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    <!--[if lt IE 8]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <div class="topbar">
+      <div class="row">
+        <div class="small-11 small-centered columns">
+          <ul class="menu float-right">
+            <li class="topbar-title"><a id="logo" href="https://elkebirmed.github.io/arli/">آرلي</a></li>
+          </ul>
+          <ul class="menu float-left">
+            <li><a href="get_started.html">تعلم</a></li>
+            <li><a href="api.html">API</a></li>
+            <li><a href="https://gitter.im/elkebirmed/arli">دردشة</a></li>
+            <li><a href="https://github.com/elkebirmed/arli/issues">مشاكل</a></li>
+            <li><a href="https://github.com/elkebirmed/arli">تطوير</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="intro" id="top">
+      <div class="row">
+        <div class="small-11 small-centered columns">
+          <p class="text-center lead arabic">أدوات جافاسكريبت لتطوير عربي</p>
+          <p class="text-center lead eng">JavaScript tools for an Arabic development</p>
+          <div class="text-center"><a class="large secondary hollow button" href="https://raw.githubusercontent.com/elkebirmed/arli/master/dist/arli.min.js">0.3.0</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="row">
+        <div class="small-11 small-centered columns">
+          <section class="section">
+            <div id="try_transform" class="try" v-cloak>
+              <h1 class="text-center">لنجرب تحويل بعض النصوص</h1>
+              <textarea class="input" v-model="content"></textarea>
+              <div class="output">{{ transformed }}</div>
+            </div>
+          </section>
+
+          <section class="section">
+            <h1 class="text-center">ما هو آرلي؟</h1>
+            <p>آرلي باللغة الإنجليزية arli يعني Arabic library، يسعى آرلي لحل مشاكل الكتابة باللغة العربية في إنطلاقته و يرقى لحلول أخرى مستقبلا، لآرلي عدة مميزات:</p>
+            <ul>
+              <li><b>عربي: </b>يبرمج آرلي للغة العربية و بأيادي عربية لكل مستعملي اللغة العربية.</li>
+              <li><b>مجاني: </b>يمكنك إستعمال آرلي في شتى المجالات مجانا، كما يمكنك المساهمة في تطويره.</li>
+              <li><b>مرن: </b>تستطيع إستعمال آرلي على المتصفح، npm، Bower ...إلخ.</li>
+              <li><b>إختياري: </b>لدى آرلي الكثير من الخيارات، يمكنك مثلا تعطيل بعض الأعمال بسهولة.</li>
+              <li><b>راقي: </b>يستعمل آرلي أدوات رائعة لتسهيل تطويره و دعمه.</li>
+              <li><b>ممتع: </b>ما المتعة في آرلي؟ <a href="https://gitter.im/elkebirmed/arli">أجب عن السؤال</a></li>
+            </ul>
+          </section>
+
+          <section class="section">
+            <h1 class="text-center">أنت و آرلي!</h1>
+            <p>
+              ينتظر منك آرلي دعما سواء كنت مطور ويب، مصمم، مبرمج، مستعمل، طباخ...إلخ<br>
+              لقد ذكرت طباخا مع أن لا علاقة له بموضوعنا هذا، لكن بما أن زوجتي التي لا تعرف البرمجة تساعدني في تطوير آرلي لم لا يستطيع الطباخ فعل ذلك...
+              هذا ليس بمشكل، المشكل يكمن فيك أنت لأنك معني بالأمر و لا تبالي، أنا مطور مبتدأ مثلك أنتظر مساهمتك بفارغ الصبر.
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="row">
+        <div class="small-11 small-centered columns">
+          <p class="text-center">
+            يمكن إستعمال آرلي بحقوق <a href="http://opensource.org/licenses/MIT">MIT</a><br>
+            برمج بحب من طرف <a href="https://twitter.com/elkebirmed/">محمد الكبير</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="bower_components/vue/dist/vue.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="foundation-rtl/js/foundation.min.js"></script>
+    <script src="https://raw.githubusercontent.com/elkebirmed/arli/master/dist/arli.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <!--<script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X','auto');ga('send','pageview');
+    </script>-->
+  </body>
+</html>

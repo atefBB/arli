@@ -1,0 +1,253 @@
+@import url(http://fonts.googleapis.com/earlyaccess/droidarabickufi.css);
+
+body, textarea, li {
+  line-height: 1.8;
+}
+
+body, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Droid Arabic Kufi', Arial, sans-serif;
+}
+
+a {
+  color: #1D6E86;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 1.1rem;
+}
+
+h2 {
+  font-size: .9rem;
+}
+
+h3 {
+  font-size: .7rem
+}
+
+h4 {
+  font-size: .55rem
+}
+
+ul {
+  padding-right: 1.3rem;
+}
+
+pre code.code {
+  padding-left: 3rem;
+  direction: ltr;
+  margin-bottom: 1rem;
+}
+
+.browserupgrade {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+.rtl {
+  direction: rtl;
+}
+
+.topbar {
+  background-color: #F5DA55;
+  border-bottom: 2px solid #323330;
+}
+
+.topbar a, .footer a {
+  color: #222;
+  transition: color .25s ease-out;
+}
+
+.topbar a:hover, .topbar a:active, .footer a:hover, .footer a:active {
+  color: #FFF;
+}
+
+.topbar .menu>li:not(.menu-text)>a#logo {
+  font-weight: 700;
+  padding: 0.45rem 1rem .7rem;
+  font-size: 125%;
+}
+
+.intro {
+  border-bottom: 2px solid #323330;
+  background-color: rgba(50, 51, 48, 0.70);
+  position: relative;
+  padding-top: 5rem;
+  padding-bottom: 3.5rem;
+}
+
+.intro::after {
+  content: "";
+  background-image: url('../images/blueprint.jpg');
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  animation: animatedBackground 80s linear infinite;
+}
+
+@keyframes animatedBackground {
+	0% { background-position: 0 0; }
+	50% { background-position: 100% 0%; }
+  100% { background-position: 0 0; }
+}
+
+.intro .lead.arabic {
+  color: #FFF;
+  font-weight: 700;
+  font-size: 180%;
+  margin-bottom: 0;
+}
+
+.intro .lead.eng {
+  color: #F5DA55;
+  font-weight: 700;
+  font-size: 230%;
+  margin-bottom: 1.3rem;
+}
+
+.intro .button {
+  padding: 1rem 4rem;
+}
+
+.main {
+  margin-top: 7rem;
+}
+
+.section {
+  margin-bottom: 5rem;
+}
+
+.try .input {
+  width: 100%;
+  min-height: 9rem;
+  padding: 1rem;
+}
+
+.try .output {
+  padding: 1rem;
+  border: 1px solid #CACACA;
+  font-family: Arial, sans-serif;
+  background-color: #F9FBF9;
+}
+
+.api {
+  direction: ltr;
+}
+
+.api .content ul {
+  padding-left: 1.3rem;
+}
+
+.api .content ul li i {
+  color: #D07650;
+}
+
+.api .content h3, .api .content h4 {
+  border-bottom: 1px solid #CACACA;
+}
+
+.api .content h3 span, .api .content h4 span {
+  color: #888;
+}
+
+.api .content h3 i a, .api .content h4 i a {
+  font-size: 45%;
+  float: right;
+  line-height: 4;
+  padding-right: 0.5rem;
+  color: #CACACA;
+}
+
+.api .sidebar {
+  padding-top: 2rem;
+}
+
+.api .sidebar ul {
+  border-right: 1px solid #F5DA55;
+  border-left: 1px solid #F5DA55;
+  padding-right: 0;
+}
+
+.api .sidebar li a {
+  border-bottom: 1px solid #F5DA55;
+}
+
+.api .sidebar li a:hover, .api .sidebar li a:active {
+  background-color: #F5DA55;
+  color: #FFF;
+  transition: color .25s ease-out;
+}
+
+.api .sidebar li a.first {
+  font-weight: 700;
+  background-color: #F5DA55;
+  color: #222;
+}
+
+.footer {
+  background-color: #F5DA55;
+  border-top: 2px solid #323330;
+  padding: 1rem 0 .6rem;
+  color: #525252;
+}
+
+/* Medium and up */
+@media screen and (min-width: 40em) {
+  h1 {
+    font-size: 2.3rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.8rem;
+  }
+
+  h4 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+  .topbar .menu {
+    padding-top: .3rem;
+    padding-bottom: .3rem;
+  }
+
+  .topbar .menu.float-right, .topbar .menu.float-left {
+    float: none !important;
+  }
+
+  .topbar .menu.float-right {
+    border-bottom: 1px solid #323330;
+  }
+
+  .topbar .menu.float-right li {
+    display: block;
+  }
+
+  .topbar .menu.float-right li a {
+    text-align: center;
+  }
+
+  .topbar .menu.float-left li {
+    width: 22%;
+  }
+}
