@@ -34,6 +34,11 @@ describe('arli.transform(value, [options])', function() {
     arli.transform('مرحبا').should.be.not.empty();
   });
 
+  it('should return a global transformation', function() {
+    //arli.transform(',;?()% ـــ ,;?()% ـــ ').should.be.equal('،؛؟﴾﴿٪ ـ ،؛؟﴾﴿٪ ـ ');
+    arli.transform('صلى الله عليه و سلم صلى الله عليه و سلم').should.be.equal('ﷺ ﷺ');
+  });
+
   it('should return a cleaned string', function() {
     arli.transform('   مرحبا   ').should.be.equal('مرحبا');
   });
