@@ -154,12 +154,19 @@
    * Regular expression generator.
    *
    * @private
-   * @param  {RegExp} pattern - Source pattern.
+   * @param  {String|RegExp} pattern - Source pattern.
    * @param  {String} [flags] - Flags `gmiy`.
    * @return {RegExp} Returns a new generated regular expression object.
    */
   function _reg(pattern, flags) {
-    return new RegExp(pattern.source, flags || '');
+
+    if (_isString(pattern)) {
+      pattern = pattern.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+      return new RegExp(pattern, flags || '');
+    } else {
+      return new RegExp(pattern.source, flags || '');
+    }
+
   }
 
   /* -------------------------------------------------------------------------*/
@@ -169,15 +176,6 @@
    * **************************************************************************/
 
   // check.
-
-  function log(value, options) {
-
-    if (_isString(value)) {
-      var logs = [];
-
-      return value;
-    }
-  }
 
   /**
    * Transform a normal string to be more Arabian string.
@@ -268,13 +266,9 @@
       /* istanbul ignore else */
       if (options.punc) {
         for (var i = 0; i < LISTS.punctuations.length; i++) {
-          value = value.replace(LISTS.punctuations[i], function(match) {
-            if (options.excludePunc.indexOf(match) === -1) {
-              return LISTS.punctuationsReplacements[i];
-            } else {
-              return match;
-            }
-          });
+          if (options.excludePunc.indexOf(LISTS.punctuations[i]) === -1) {
+            value = value.replace(_reg(LISTS.punctuations[i], 'g'), LISTS.punctuationsReplacements[i]);
+          }
         }
       }
 
@@ -290,7 +284,7 @@
       /* istanbul ignore else */
       if (options.ligatures) {
         for (var i = 0; i < LISTS.wordLigatures.length; i++) {
-          value = value.replace(LISTS.wordLigatures[i], function(match) {
+          value = value.replace(_reg(LISTS.wordLigatures[i], 'g'), function(match) {
             for (var y = 0; y < options.excludeLigatures.length; y++) {
               if (options.excludeLigatures[y].indexOf(match) === -1) {
                 return LISTS.wordLigaturesReplacements[i];
@@ -310,7 +304,6 @@
   /* -------------------------------------------------------------------------*/
 
   return {
-    log: log,
     transform: transform,
     _version: '0.2.0'
   };
