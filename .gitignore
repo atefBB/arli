@@ -5,3 +5,4 @@ dist
 node_modules
 test
 test/bower_components
+coverage
