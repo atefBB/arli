@@ -87,13 +87,9 @@
       /* istanbul ignore else */
       if (options.punc) {
         for (var i = 0; i < LISTS.punctuations.length; i++) {
-          value = value.replace(LISTS.punctuations[i], function(match) {
-            if (options.excludePunc.indexOf(match) === -1) {
-              return LISTS.punctuationsReplacements[i];
-            } else {
-              return match;
-            }
-          });
+          if (options.excludePunc.indexOf(LISTS.punctuations[i]) === -1) {
+            value = value.replace(_reg(LISTS.punctuations[i], 'g'), LISTS.punctuationsReplacements[i]);
+          }
         }
       }
 
@@ -109,7 +105,7 @@
       /* istanbul ignore else */
       if (options.ligatures) {
         for (var i = 0; i < LISTS.wordLigatures.length; i++) {
-          value = value.replace(LISTS.wordLigatures[i], function(match) {
+          value = value.replace(_reg(LISTS.wordLigatures[i], 'g'), function(match) {
             for (var y = 0; y < options.excludeLigatures.length; y++) {
               if (options.excludeLigatures[y].indexOf(match) === -1) {
                 return LISTS.wordLigaturesReplacements[i];
