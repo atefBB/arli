@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>arli - Get started</title>
+    <meta name="description" content="لتعلم كبداية بأنك تتعامل مع لغة البرمجة JavaScript، مما يتيح لك إستعمال آرلي في عدةمجالات">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="foundation-rtl/css/foundation.min.css">
+    <link rel="stylesheet" href="bower_components/highlightjs/styles/github-gist.css">
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    <!--[if lt IE 8]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <div class="topbar">
+      <div class="row">
+        <div class="small-11 small-centered columns">
+          <ul class="menu float-right">
+            <li class="topbar-title"><a id="logo" href="https://elkebirmed.github.io/arli/">آرلي</a></li>
+          </ul>
+          <ul class="menu float-left">
+            <li><a href="get_started.html">تعلم</a></li>
+            <li><a href="api.html">API</a></li>
+            <li><a href="https://gitter.im/elkebirmed/arli">دردشة</a></li>
+            <li><a href="https://github.com/elkebirmed/arli/issues">مشاكل</a></li>
+            <li><a href="https://github.com/elkebirmed/arli">تطوير</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="main" id="top">
+      <div class="row">
+        <div class="small-11 small-centered columns">
+
+          <section class="section">
+            <h1 class="text-center">قبل كل شيء...</h1>
+            <p>لتعلم كبداية بأنك تتعامل مع لغة البرمجة JavaScript، مما يتيح لك إستعمال آرلي في عدةمجالات:</p>
+            <h2>المتصفح</h2>
+            <p>
+              أولا يجب أن تحمل الملف الخاص بالإنتاج أو التطوير، ملف الإنتاج سريع، أما ملف التطوير ثقيل لكنه يحتوي على النعليقات التي تساعدك في التطوير.
+              <br><a href="https://raw.githubusercontent.com/elkebirmed/arli/master/dist/arli.min.js">تحميل ملف الإنتاج</a><br><a href="https://raw.githubusercontent.com/elkebirmed/arli/master/dist/arli.js">تحميل ملف التطوير</a>
+              <br>ثم يمكننا إدراج الملف مع صفحة HTML:
+            </p>
+            <pre><code class="html code">
+&lt;script src="arli.js"&gt;&lt;/script&gt;
+&lt;!-- أو --&gt;
+&lt;script src="arli.min.js"&gt;&lt;/script&gt;
+&lt;!-- أو من الموقع بدون تحميل الملف--&gt;
+&lt;script src="https://raw.githubusercontent.com/elkebirmed/arli/master/dist/arli.min.js"&gt;&lt;/script&gt;
+            </code></pre>
+
+            <h2>Bower</h2>
+            <p>
+              يمكنك تنصيب آرلي من خلال Bower:
+            </p>
+            <pre><code class="sha code">
+$ bower install arli
+            </code></pre>
+            <p>
+              ثم تستعمله في صفحاتك:
+            </p>
+            <pre><code class="html code">
+&lt;script src="bower_components/arli/dist/arli.min.js"&gt;&lt;/script&gt;
+            </code></pre>
+
+            <h2>npm</h2>
+            <p>
+              يمكنك تنصيب آرلي من خلال npm على منصة Node.js أو io.js من خلال إحدى الطرق التالية:
+            </p>
+            <pre><code class="sha code">
+$ npm install arli
+$ npm install arli --save
+$ npm install arli --save-dev
+$ npm install arli --global
+            </code></pre>
+            <p>
+              ثم تستعمله في برنامجك:
+            </p>
+            <pre><code class="javascript code">
+var arli = require('arli');
+// أو باستعمال طريقة جافاسكريبت 6
+import arli from 'arli';
+            </code></pre>
+
+            <h1 class="text-center">أنت جاهز الآن</h1>
+            <p>
+              بعد أن نصبت آرلي بطريقة أو بأخرى يمكنك إستعمال البرنامج بكل بساطة:
+            </p>
+            <pre><code class="javascript code">
+arli.transform('مرحبا بالعـــــــــــالم');
+// -&gt; مرحبا بالعـالم
+
+arli.transform('0123456789');
+// -&gt; '٠١٢٣٤٥٦٧٨٩'
+
+arli.transform('0123456789', {digit: false});
+// -&gt; '0123456789'
+            </code></pre>
+
+            <h1 class="text-center">ثم ماذا؟</h1>
+            <p>
+              يمكنك أن تتعمق أكثر في صفحة الشرح المفصل <a href="api.html">API</a> أو مساعدتنا في تطوير المشروع من خلال <a href="https://github.com/elkebirmed/arli">GitHub</a>، يمكنك أن <a href="https://github.com/elkebirmed/arli/issues">تسأل</a>، <a href="https://github.com/elkebirmed/arabic.js/pulls">تقترح</a>، <a href="https://gitter.im/elkebirmed/arli">تدردش</a> ... المهم أن لا تبقى في مكانك ... إنطلق.
+            </p>
+          </section>
+
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="row">
+        <div class="small-11 small-centered columns">
+          <p class="text-center">
+            يمكن إستعمال آرلي بحقوق <a href="http://opensource.org/licenses/MIT">MIT</a><br>
+            برمج بحب من طرف <a href="https://twitter.com/elkebirmed/">محمد الكبير</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="bower_components/vue/dist/vue.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="foundation-rtl/js/foundation.min.js"></script>
+    <script src="bower_components/highlightjs/highlight.pack.min.js"></script>
+    <script src="https://raw.githubusercontent.com/elkebirmed/arli/master/dist/arli.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <script type="text/javascript">
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!--<script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X','auto');ga('send','pageview');
+    </script>-->
+  </body>
+</html>

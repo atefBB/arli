@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>arli - API documentation</title>
+    <meta name="description" content="شرح مفصل">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="foundation-rtl/css/foundation.min.css">
+    <link rel="stylesheet" href="bower_components/highlightjs/styles/github-gist.css">
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    <!--[if lt IE 8]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <div class="topbar">
+      <div class="row">
+        <div class="small-11 small-centered columns">
+          <ul class="menu float-right">
+            <li class="topbar-title"><a id="logo" href="https://elkebirmed.github.io/arli/">آرلي</a></li>
+          </ul>
+          <ul class="menu float-left">
+            <li><a href="get_started.html">تعلم</a></li>
+            <li><a href="api.html">API</a></li>
+            <li><a href="https://gitter.im/elkebirmed/arli">دردشة</a></li>
+            <li><a href="https://github.com/elkebirmed/arli/issues">مشاكل</a></li>
+            <li><a href="https://github.com/elkebirmed/arli">تطوير</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="main" id="top">
+      <div class="row">
+        <div class="small-11 small-centered columns">
+
+          <section class="section">
+            <h1 class="text-center">شرح مفصل API</h1>
+            <div class="row api">
+              <div class="medium-9 columns content">
+                <h3 id="transform"><a href="#transform">#</a> arli.transform( <span>value, [options]</span> ) <i><a href="#top">إلى أعلى</a></i></h3>
+                <ul>
+                  <li>Returns: <i>String</i></li>
+                </ul>
+                <p class="rtl">
+                  تمكنك هذه الميزة من تحويل النصوص الشبه عربية إلى عربية.
+                </p>
+                <pre><code class="javascript code">
+arli.transform('مرحبا بالعـــــــــــــالم');
+// -> 'مرحبا بالعـالم'
+                </code></pre>
+
+                <h4 id="transform_value"><a href="#transform_value">#</a> value <i><a href="#top">إلى أعلى</a></i></h4>
+                <ul>
+                  <li>Type: <i>String</i></li>
+                  <li>Default: <i>Undefined</i></li>
+                </ul>
+                <p class="rtl">
+                  يستعمل لإدراج القيمة أو النص المراد تحويله.
+                </p>
+                <pre><code class="javascript code">
+arli.transform('مرحبا بالعـــــــــــــالم');
+// -> 'مرحبا بالعـالم'
+                </code></pre>
+
+                <h4 id="transform_options"><a href="#transform_options">#</a> [options] <i><a href="#top">إلى أعلى</a></i></h4>
+                <ul>
+                  <li>Type: <i>Object</i></li>
+                  <li>Default: <i>{clean: true, date: true, dateFrom: 'all', dateTo: 'all', digit: true, excludeLigatures: [' '], excludePunc: ' ', ligatures: true, numberSep: true, punc: true, removeTatweel: 'extra'}</i></li>
+                </ul>
+                <p class="rtl">
+                  يستعمل كخيارات لتحويل النص، سيتم شرحها تفصيلا فيما يلي.
+                </p>
+                <pre><code class="javascript code">
+arli.transform('0123456789', {digit: false});
+// -> '0123456789'
+                </code></pre>
+
+                <h4 id="transform_options_clean"><a href="#transform_options_clean">#</a> [options.clean] <i><a href="#top">إلى أعلى</a></i></h4>
+                <ul>
+                  <li>Type: <i>Boolean</i></li>
+                  <li>Default: <i>true</i></li>
+                </ul>
+                <p class="rtl">
+                  ينزع الشوائب الزائدة عن النص مثل المساحات المبالغ فيها.
+                </p>
+                <pre><code class="javascript code">
+arli.transform('     مرحبا    ', {clean: true});
+// -> 'مرحبا'
+
+arli.transform('     مرحبا    ', {clean: false});
+// -> '     مرحبا     '
+                </code></pre>
+
+                <h4 id="transform_options_date"><a href="#transform_options_date">#</a> [options.date] <i><a href="#top">إلى أعلى</a></i></h4>
+                <ul>
+                  <li>Type: <i>Boolean</i></li>
+                  <li>Default: <i>true</i></li>
+                </ul>
+                <p class="rtl">
+                  إتاحة أو تعطيل تحويل التاريخ إلى الصيغة العربية.
+                </p>
+                <pre><code class="javascript code">
+arli.transform('27/05/1989 27.05.1989 27-05-1989', {date: true});
+// -> '٢٧؍٠٥؍١٩٨٩ ٢٧؍٠٥؍١٩٨٩ ٢٧؍٠٥؍١٩٨٩'
+
+arli.transform('27/05/1989 27.05.1989 27-05-1989', {date: false});
+// -> '27/05/1989 27.05.1989 27-05-1989'
+                </code></pre>
+
+                <h4 id="transform_options_dateFrom"><a href="#transform_options_dateFrom">#</a> [options.dateFrom] <i><a href="#top">إلى أعلى</a></i></h4>
+                <ul>
+                  <li>Type: <i>String</i></li>
+                  <li>Default: <i>'all'</i></li>
+                  <li>Options: <i>'all', 'DMY', 'MDY'</i></li>
+                </ul>
+                <p class="rtl">
+                  إختيار صيغة التاريخ المراد تحويلها.
+                </p>
+                <pre><code class="javascript code">
+arli.transform('27/05/1989 05/27/1989', {dateFrom: 'all'});
+// -> '٢٧؍٠٥؍١٩٨٩ ٠٥؍٢٧؍١٩٨٩'
+
+arli.transform('27/05/1989 05/27/1989', {dateFrom: 'DMY'});
+// -> '٢٧؍٠٥؍١٩٨٩ 05/27/1989'
+
+arli.transform('27/05/1989 05/27/1989', {dateFrom: 'MDY'});
+// -> '27/05/1989 ٠٥؍٢٧؍١٩٨٩'
+                </code></pre>
+
+                <h4 id="transform_options_dateTo"><a href="#transform_options_dateTo">#</a> [options.dateTo] <i><a href="#top">إلى أعلى</a></i></h4>
+                <ul>
+                  <li>Type: <i>String</i></li>
+                  <li>Default: <i>'all'</i></li>
+                  <li>Options: <i>'all', 'DMY', 'MDY'</i></li>
+                </ul>
+                <p class="rtl">
+                  إختيار صيغة التاريخ المراد التحويل إليها.
+                </p>
+                <pre><code class="javascript code">
+arli.transform('27/05/1989 05/27/1989', {dateTo: 'all'});
+// -> '٢٧؍٠٥؍١٩٨٩ ٠٥؍٢٧؍١٩٨٩'
+
+arli.transform('27/05/1989 05/27/1989', {dateTo: 'DMY'});
+// -> '٢٧؍٠٥؍١٩٨٩ ٢٧؍٠٥؍١٩٨٩'
+
+arli.transform('27/05/1989 05/27/1989', {dateTo: 'MDY'});
+// -> '٠٥؍٢٧؍١٩٨٩ ٠٥؍٢٧؍١٩٨٩'
+                </code></pre>
+
+                <h4 id="transform_options_digit"><a href="#transform_options_digit">#</a> [options.digit] <i><a href="#top">إلى أعلى</a></i></h4>
+                <ul>
+                  <li>Type: <i>Boolean</i></li>
+                  <li>Default: <i>true</i></li>
+                </ul>
+                <p class="rtl">
+                  تحويل الأرقام إلى عربية هندية.
+                </p>
+                <pre><code class="javascript code">
+arli.transform('0123456789', {digit: true});
+// -> '٠١٢٣٤٥٦٧٨٩'
+
+arli.transform('0123456789', {digit: false});
+// -> '0123456789'
+                </code></pre>
+
+                <h4 id="transform_options_excludeLigatures"><a href="#transform_options_excludeLigatures">#</a> [options.excludeLigatures] <i><a href="#top">إلى أعلى</a></i></h4>
+                <ul>
+                  <li>Type: <i>Array</i></li>
+                  <li>Default: <i>[' ']</i></li>
+                </ul>
+                <p class="rtl">
+                  إقصاء بعض الجمل الطويلة من التقليص.<br>
+                  المثال أدناه يرى من اليمين إلى اليسار: <span>محمد ﷺ و عمر ؓ</span>
+                </p>
+                <pre><code class="javascript code">
+arli.transform('محمد صلى الله عليه و سلم و عمر رضي الله عنه', {excludeLigatures: [' ']});
+// -> 'محمد ﷺ و عمر ؓ'
+
+arli.transform('محمد صلى الله عليه و سلم و عمر رضي الله عنه', {excludeLigatures: ['عمر رضي الله عنه']});
+// -> 'محمد ﷺ و عمر رضي الله عنه'
+                </code></pre>
+
+                <h4 id="transform_options_excludePunc"><a href="#transform_options_excludePunc">#</a> [options.excludePunc] <i><a href="#top">إلى أعلى</a></i></h4>
+                <ul>
+                  <li>Type: <i>String</i></li>
+                  <li>Default: <i>' '</i></li>
+                </ul>
+                <p class="rtl">
+                  إقصاء بعض الرموز من التحويل.
+                </p>
+                <pre><code class="javascript code">
+arli.transform(')?,;%(', {excludePunc: ' '});
+// -> '﴿٪؟،؛﴾'
+
+arli.transform(')?,;%(', {excludePunc: '()%'});
+// -> ')%؟،؛('
+                </code></pre>
+
+                <h4 id="transform_options_ligatures"><a href="#transform_options_ligatures">#</a> [options.ligatures] <i><a href="#top">إلى أعلى</a></i></h4>
+                <ul>
+                  <li>Type: <i>Boolean</i></li>
+                  <li>Default: <i>true</i></li>
+                </ul>
+                <p class="rtl">
+                  تقليص الجمل الطويلة.
+                </p>
+                <pre><code class="javascript code">
+arli.transform('محمد صلى الله عليه و سلم', {ligatures: true});
+// -> 'محمد ﷺ'
+
+arli.transform('محمد صلى الله عليه و سلم', {ligatures: false});
+// -> 'محمد صلى الله عليه و سلم'
+                </code></pre>
+
+                <h4 id="transform_options_numberSep"><a href="#transform_options_numberSep">#</a> [options.numberSep] <i><a href="#top">إلى أعلى</a></i></h4>
+                <ul>
+                  <li>Type: <i>Boolean</i></li>
+                  <li>Default: <i>true</i></li>
+                </ul>
+                <p class="rtl">
+                  تحويل فواصل الأرقام إلى الصيغة العربية.
+                </p>
+                <pre><code class="javascript code">
+arli.transform('10.50 999,888.00', {numberSep: true});
+// -> '١٠٫٥٠ ٩٩٩٬٨٨٨٫٠٠'
+
+arli.transform('10.50 999,888.00', {numberSep: false});
+// -> '١٠.٥٠ ٩٩٩،٨٨٨.٠٠'
+                </code></pre>
+
+                <h4 id="transform_options_punc"><a href="#transform_options_punc">#</a> [options.punc] <i><a href="#top">إلى أعلى</a></i></h4>
+                <ul>
+                  <li>Type: <i>Boolean</i></li>
+                  <li>Default: <i>true</i></li>
+                </ul>
+                <p class="rtl">
+                  تحويل الرموز إلى الصيغ العربية.
+                </p>
+                <pre><code class="javascript code">
+arli.transform(')?,;%(', {punc: true});
+// -> '﴿٪؟،؛﴾'
+
+arli.transform(')?,;%(', {punc: false});
+// -> ')?,;%('
+                </code></pre>
+
+                <h4 id="transform_options_removeTatweel"><a href="#transform_options_removeTatweel">#</a> [options.removeTatweel] <i><a href="#top">إلى أعلى</a></i></h4>
+                <ul>
+                  <li>Type: <i>String</i></li>
+                  <li>Default: <i>'extra'</i></li>
+                  <li>Options: <i>'extra', 'all', 'none'</i></li>
+                </ul>
+                <p class="rtl">
+                  مسح المد المبالغ فيه.
+                </p>
+                <pre><code class="javascript code">
+arli.transform('مرحبا بالعـــــــالم', {removeTatweel: 'extra'});
+// -> 'مرحبا بالعـالم'
+
+arli.transform('مرحبا بالعـــــــالم', {removeTatweel: 'all'});
+// -> 'مرحبا بالعالم'
+
+arli.transform('مرحبا بالعـــــــالم', {removeTatweel: 'none'});
+// -> 'مرحبا بالعـــــــالم'
+                </code></pre>
+              </div>
+              <div class="medium-3 columns sidebar">
+                <ul class="vertical menu">
+                  <li><a href="#transform" class="first">transform</a></li>
+                  <li><a href="#transform_value">value</a></li>
+                  <li><a href="#transform_options">options</a></li>
+                  <li><a href="#transform_options_clean">options.clean</a></li>
+                  <li><a href="#transform_options_date">options.date</a></li>
+                  <li><a href="#transform_options_dateFrom">options.dateFrom</a></li>
+                  <li><a href="#transform_options_dateTo">options.dateTo</a></li>
+                  <li><a href="#transform_options_digit">options.digit</a></li>
+                  <li><a href="#transform_options_excludeLigatures">options.excludeLigatures</a></li>
+                  <li><a href="#transform_options_excludePunc">options.excludePunc</a></li>
+                  <li><a href="#transform_options_ligatures">options.ligatures</a></li>
+                  <li><a href="#transform_options_numberSep">options.numberSep</a></li>
+                  <li><a href="#transform_options_punc">options.punc</a></li>
+                  <li><a href="#transform_options_removeTatweel">options.removeTatweel</a></li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="row">
+        <div class="small-11 small-centered columns">
+          <p class="text-center">
+            يمكن إستعمال آرلي بحقوق <a href="http://opensource.org/licenses/MIT">MIT</a><br>
+            برمج بحب من طرف <a href="https://twitter.com/elkebirmed/">محمد الكبير</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="bower_components/vue/dist/vue.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="foundation-rtl/js/foundation.min.js"></script>
+    <script src="bower_components/highlightjs/highlight.pack.min.js"></script>
+    <script src="https://raw.githubusercontent.com/elkebirmed/arli/master/dist/arli.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <script type="text/javascript">
+      hljs.initHighlightingOnLoad();
+    </script>
+
+    <!--<script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X','auto');ga('send','pageview');
+    </script>-->
+  </body>
+</html>
