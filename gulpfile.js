@@ -45,7 +45,7 @@ gulp.task('concat', function() {
   return gulp.src(CONFIG.concatFiles)
     .pipe(plugins.sourcemaps.init())
       .pipe(plugins.concat('arli.js'))
-      .pipe(plugins.rename('arabic.min.js'))
+      .pipe(plugins.rename('arli.min.js'))
       .pipe(plugins.uglify())
     .pipe(plugins.sourcemaps.write('./'))
     .pipe(gulp.dest('./dist/'));

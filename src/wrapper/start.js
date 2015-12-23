@@ -1,5 +1,5 @@
 /*!
- * arli.js 0.3.0
+ * arli.js 0.3.1
  * https://elkebirmed.github.io/arli
  * (c) 2015 Mohamed Elkebir <elkebir.med@gmail.com>
  * Arli may be freely distributed under the MIT license.
