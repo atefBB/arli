@@ -1,0 +1,15 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Mohamed Elkebir -- Founder -- @elkebirmed
+
+# THANKS
+
+    https://github.com/elkebirmed/arli/graphs/contributors
+
+# TECHNOLOGY COLOPHON
+
+    CSS3, HTML5, JavaScript
+    jQuery, Modernizr, Normalize.css, Foundation, Vue, HighlightJs
