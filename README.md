@@ -3,6 +3,7 @@
 > [Arli](http://elkebirmed.github.io/arli/) - JavaScript tools for an Arabic development
 
 [![Build Status](https://travis-ci.org/elkebirmed/arli.svg?branch=master)](https://travis-ci.org/elkebirmed/arli)
+[![Code Issues](https://www.quantifiedcode.com/api/v1/project/e1d5dfc34b7b4c81a29dedbb69284d13/badge.svg)](https://www.quantifiedcode.com/app/project/e1d5dfc34b7b4c81a29dedbb69284d13)
 [![Join the chat at https://gitter.im/elkebirmed/arli](https://badges.gitter.im/elkebirmed/arli.svg)](https://gitter.im/elkebirmed/arli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Usage
