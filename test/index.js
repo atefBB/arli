@@ -76,3 +76,13 @@ describe('arli.transform(value, [options])', function() {
     arli.transform('صلى الله عليه و سلم رضي الله عنه', {excludeLigatures: ['رضي الله عنه']}).should.be.equal('ﷺ رضي الله عنه');
   });
 });
+
+describe('arli.transforming(value, [options])', function() {
+  it('should return a non transformed string', function() {
+    arli.transforming('0123,;?()%ــــ').should.be.equal('0123,;?()%ــــ');
+  });
+
+  it('should return a transformed string', function() {
+    arli.transforming('0123,;?()%ــــ', {digit: true, punc: true, removeTatweel: 'extra'}).should.be.equal('٠١٢٣،؛؟﴾﴿٪ـ');
+  });
+});
