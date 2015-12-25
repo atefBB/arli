@@ -267,6 +267,23 @@ arli.transform('مرحبا بالعـــــــالم', {removeTatweel: 'all'}
 arli.transform('مرحبا بالعـــــــالم', {removeTatweel: 'none'});
 // -> 'مرحبا بالعـــــــالم'
                 </code></pre>
+
+                <h3 id="transforming"><a href="#transforming">#</a> arli.transforming( <span>value, [options]</span> ) <i><a href="#top">إلى أعلى</a></i></h3>
+                <ul>
+                  <li>Returns: <i>String</i></li>
+                </ul>
+                <p class="rtl">
+                  تمكنك هذه الميزة من تحويل النصوص الشبه عربية إلى عربية مثل transform لكن خيارات transforming معكوسة بحيث أنها لا تعمل شيء حتى تختار أنت ذلك.
+                  <br>ميزة transforming تمتلك نفس خيارات <a href="#transform">transform</a>.
+                </p>
+                <pre><code class="javascript code">
+arli.transforming('مرحبا بالعـــــــــــــالم');
+// -> 'مرحبا بالعـــــــــــــالم'
+
+arli.transforming('مرحبا بالعـــــــــــــالم', {removeTatweel: 'extra'});
+// -> 'مرحبا بالعـالم'
+                </code></pre>
+
               </div>
               <div class="medium-3 columns sidebar">
                 <ul class="vertical menu">
@@ -284,6 +301,7 @@ arli.transform('مرحبا بالعـــــــالم', {removeTatweel: 'none'
                   <li><a href="#transform_options_numberSep">options.numberSep</a></li>
                   <li><a href="#transform_options_punc">options.punc</a></li>
                   <li><a href="#transform_options_removeTatweel">options.removeTatweel</a></li>
+                  <li><a href="#transforming" class="first">transforming</a></li>
                 </ul>
               </div>
             </div>

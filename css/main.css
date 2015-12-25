@@ -156,6 +156,11 @@ pre code.code {
   color: #D07650;
 }
 
+.api h3 {
+  padding: .1rem .3rem;
+  background-color: #F5DA55;
+}
+
 .api .content h3, .api .content h4 {
   border-bottom: 1px solid #CACACA;
 }
@@ -170,6 +175,10 @@ pre code.code {
   line-height: 4;
   padding-right: 0.5rem;
   color: #CACACA;
+}
+
+.api .content h3 i a {
+  color: #FFF;
 }
 
 .api .sidebar {
