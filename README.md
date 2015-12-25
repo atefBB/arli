@@ -3,6 +3,7 @@
 > [Arli](http://elkebirmed.github.io/arli/) - JavaScript tools for an Arabic development
 
 [![Build Status](https://travis-ci.org/elkebirmed/arli.svg?branch=master)](https://travis-ci.org/elkebirmed/arli)
+[![Coverage Status](https://coveralls.io/repos/elkebirmed/arli/badge.svg?branch=master&service=github)](https://coveralls.io/github/elkebirmed/arli?branch=master)
 [![Join the chat at https://gitter.im/elkebirmed/arli](https://badges.gitter.im/elkebirmed/arli.svg)](https://gitter.im/elkebirmed/arli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Usage
