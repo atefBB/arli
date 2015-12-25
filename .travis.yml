@@ -6,3 +6,5 @@ node_js:
 before_install:
   - 'npm i -g npm@latest'
 script: gulp test
+notifications:
+  email: false
